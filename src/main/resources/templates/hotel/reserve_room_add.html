@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">房间类型</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <select name="roomType" style="background:#CCCCCC" disabled="disabled">-->
+<!--                <option value="1" th:selected="${editInfo.roomType == 1}">单人间</option>-->
+<!--                <option value="2" th:selected="${editInfo.roomType == 2}">标间</option>-->
+<!--                <option value="3" th:selected="${editInfo.roomType == 3}">三人间</option>-->
+<!--                <option value="4" th:selected="${editInfo.roomType == 4}">大床房</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="roomNum" th:value="${editInfo.roomNum}" placeholder="可不输（只预订房间类型）" autocomplete="off" class="layui-input" style="background:#CCCCCC" disabled="disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">宾客姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="guestName" th:value="${editInfo.guestName}" lay-verify="required" placeholder="请输入宾客姓名" autocomplete="off" class="layui-input" style="background:#CCCCCC" disabled="disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">宾客电话</label>
+        <div class="layui-input-inline">
+            <input type="text" name="phonenum" th:value="${editInfo.phonenum}" lay-verify="phone" placeholder="请输入宾客电话" autocomplete="off" class="layui-input" style="background:#CCCCCC" disabled="disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">预订时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="startTime" id="startTime" th:value="${editInfo.startTime}" lay-verify="required" placeholder="请输入入住时间" autocomplete="off" class="layui-input" style="background:#CCCCCC" disabled="disabled">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">预订时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="endTime" id="endTime" th:value="${editInfo.endTime}" lay-verify="required" placeholder="请选择退房时间" autocomplete="off" class="layui-input" style="background:#CCCCCC" disabled="disabled">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">预付款(元)</label>
+        <div class="layui-input-inline">
+            <input type="text" name="pay" th:value="${editInfo.pay}" lay-verify="number" placeholder="请选择预付款" autocomplete="off" class="layui-input" style="background:#CCCCCC" disabled="disabled">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+            <input type="text" name="remark" th:value="${editInfo.remark}" placeholder="请输入备注" autocomplete="off" class="layui-input" style="background:#CCCCCC" disabled="disabled">
+        </div>
+    </div>
+
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+
+</body>
+</html>

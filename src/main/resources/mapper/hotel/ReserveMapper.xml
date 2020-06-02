@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kd.dsr.modules.hotel.mapper.ReserveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.kd.dsr.modules.hotel.entity.Reserve">
+        <id column="id" property="id" />
+        <result column="room_id" property="roomId" />
+        <result column="room_type" property="roomType" />
+        <result column="room_num" property="roomNum" />
+        <result column="guest_id" property="guestId" />
+        <result column="guest_name" property="guestName" />
+        <result column="phonenum" property="phonenum" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="pay" property="pay" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, room_id, room_type, room_num, guest_id, guest_name, phonenum, start_time, end_time, pay, status, remark, create_time, create_by
+    </sql>
+
+    <select id="selectRoomList" resultType="cn.kd.dsr.modules.hotel.entity.Reserve">
+        select <include refid="Base_Column_List" /> from reserve_room
+        <trim prefix="where" prefixOverrides="and">
+            <if test="reserve.guestName != null and reserve.guestName != ''">
+                and guest_name like concat(#{reserve.guestName}, "%")
+            </if>
+            <if test="reserve.roomType != null">
+                and room_type = #{reserve.roomType}
+            </if>
+            <if test="reserve.phonenum != null and reserve.phonenum != ''">
+                and phonenum like concat("%" ,#{reserve.phonenum}, "%")
+            </if>
+        </trim>
+        order by create_time desc
+    </select>
+
+</mapper>

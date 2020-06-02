@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kd.dsr.modules.hotel.mapper.GuestMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.kd.dsr.modules.hotel.entity.Guest">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="phone_num" property="phoneNum" />
+        <result column="ID_num" property="idNum" />
+        <result column="email" property="email" />
+        <result column="address" property="address" />
+        <result column="nation" property="nation" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, name, phone_num, ID_num, email, address, nation, remark, create_time, create_by
+    </sql>
+
+    <select id="selectGuestList" resultType="cn.kd.dsr.modules.hotel.entity.Guest">
+        select <include refid="Base_Column_List" /> from hotel_guest
+        <trim prefix="where" prefixOverrides="and">
+            <if test="guest.name != null and guest.name != ''">
+                and name like concat("%",#{guest.name}, "%")
+            </if>
+            <if test="guest.phoneNum != null">
+                and phone_num like concat("%",#{guest.phoneNum}, "%")
+            </if>
+            <if test="guest.idNum != null">
+                and ID_num like concat("%",#{guest.idNum}, "%")
+            </if>
+        </trim>
+        order by create_time desc
+    </select>
+
+    <insert id="savaGuest" parameterType="cn.kd.dsr.modules.hotel.entity.Guest" useGeneratedKeys="true" keyProperty="id">
+        insert into hotel_guest(name,phone_num,ID_num,create_by)
+            values(#{name},#{phoneNum},#{idNum},#{createBy})
+    </insert>
+
+</mapper>

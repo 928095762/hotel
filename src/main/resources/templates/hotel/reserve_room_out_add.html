@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body>
+<div class="layui-form" style="margin: 6% 25% auto">
+
+    <label class="layui-input-block" style="color: orange;font-size: 18px">欢迎使用自助房间预定</label>
+    <hr class="layui-bg-orange">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间类型</label>
+        <div class="layui-input-block">
+            <select name="roomType">
+                <option value="1">单人间</option>
+                <option value="2">标间</option>
+                <option value="3">三人间</option>
+                <option value="4">大床房</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间号</label>
+        <div class="layui-input-block">
+            <select name="roomNum" autocomplete="off" class="layui-input" lay-search>
+                <option value="" selected>可不填（只预订房间类型）,或者选择一个房间</option>
+                <option th:each="rroom:${rooms}"
+                th:value="${rroom.roomNum}"
+                th:text="${rroom.roomNum}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">宾客姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="guestName" lay-verify="required" placeholder="请输入宾客姓名" autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">宾客电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="phonenum"  lay-verify="phone" placeholder="请输入宾客电话" autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入住时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="startTime" id="startTime" lay-verify="required" placeholder="请输入入住时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">退房时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="endTime" id="endTime" lay-verify="required" placeholder="请选择退房时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="button" lay-submit="" lay-filter="kFormSubmit" id="kFormSubmit" value="提交" class="layui-btn">
+        </div>
+    </div>
+
+</div>
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var $ = layui.$, form = layui.form, laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startTime' // 指定元素
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endTime' // 指定元素
+            ,type: 'datetime'
+        });
+
+        //监听提交
+        form.on('submit(kFormSubmit)', function(data){
+            var field = data.field; //获取提交的字段
+
+            var url = 'hotel/reserve/outAdd';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            $.ajax({
+                type: req.type.post,
+                url: BASE_WEB + url,
+                data: field,
+                async: false,
+                success: function (r) {
+                    if (r.code === req.status.ok) {
+                        // 重载表格
+                        kvfKit.sucessMsg("预定成功！");
+                    } else {
+                        kvfKit.errorMsg(r.msg);
+                    }
+                }
+            });
+        });
+    })
+</script>
+</body>
+</html>

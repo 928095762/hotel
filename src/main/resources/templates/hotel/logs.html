@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<body style="background-color: #f2f2f2;">
+
+<div id="kPage" class="layui-fluid" style="padding: 0">
+    <div class="layui-row">
+        <div class="layui-col-md12" id="kMainContentCol">
+            <div class="layui-fluid kvf-fluid-padding15">
+                <div class="layui-card">
+                    <form>
+                        <div class="layui-form layui-card-header kvf-card-header-auto">
+                            <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">房间号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="roomNum" placeholder="请输入房间号" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">宾客姓名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="guestName" id="guestName" placeholder="请输入宾客姓名" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">宾客电话</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="phonenum" placeholder="请输入宾客电话" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">房间状态</label>
+                                <div class="layui-input-inline">
+                                    <select class="layui-select" name="status">
+                                        <option value="">请选择</option>
+                                        <option value="1">住房中</option>
+                                        <option value="2">已退房</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">付款状态</label>
+                                <div class="layui-input-inline">
+                                    <select class="layui-select" name="priceStatus">
+                                        <option value="">请选择</option>
+                                        <option value="0">未付款</option>
+                                        <option value="1">已结清</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button class="layui-btn " lay-submit="" lay-filter="kTableSearchFilter">
+                                    <i class="layui-icon layui-icon-search"></i>
+                                </button>
+                                <button class="layui-btn " type="reset">
+                                    <i class="layui-icon layui-icon-refresh-1"></i>
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="layui-card-body">
+                        <table id="kContentTable" lay-filter="kContentTable"></table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--表格列格式化模板 start-->
+<script type="text/html" id="priceStatusTpl">
+    {{#  if(d.priceStatus == 0){ }}
+    <span class="layui-badge layui-bg-blue">未付款</span>
+    {{# } else if(d.priceStatus == 1) { }}
+    <span class="layui-badge layui-bg-blue">已结清</span>
+    {{# } }}
+</script>
+<script type="text/html" id="statusTpl">
+    {{#  if(d.status == 1){ }}
+    <span class="layui-badge layui-bg-blue">住房中</span>
+    {{# } else if(d.status == 2) { }}
+    <span class="layui-badge layui-bg-blue">已退房</span>
+    {{# } }}
+</script>
+<script type="text/html" id="roomTypeTpl">
+    {{#  if(d.roomType == 1){ }}
+    <span class="layui-badge layui-bg-blue">单人间</span>
+    {{# } else if(d.roomType == 2) { }}
+    <span class="layui-badge layui-bg-blue">标间</span>
+    {{# } else if(d.roomType == 3) { }}
+    <span class="layui-badge layui-bg-blue">三人间</span>
+    {{# } else if(d.roomType == 4) { }}
+    <span class="layui-badge layui-bg-blue">大床房</span>
+    {{# } }}
+</script>
+<!--表格列格式化模板 end-->
+
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+
+<!--头部工具栏模板-->
+<script type="text/html" id="headToolbarTpl">
+    <button class="layui-btn layui-btn-sm " lay-event="add">添加</button>
+    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">批量删除</button>
+</script>
+
+<!--表格行工具栏模板-->
+<script type="text/html" id="rowToolbarTpl">
+    {{#  if(d.status == 1 && d.priceStatus == 0){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>修改</a>
+    {{# } }}
+    {{#  if(d.priceStatus == 0){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="payment"><i class="layui-icon layui-icon-edit"></i>结账</a>
+    {{# } }}
+    {{#  if(d.status == 1 && d.priceStatus == 1){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="goAway"><i class="layui-icon layui-icon-edit"></i>退房</a>
+    {{# } }}
+<!--    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>-->
+</script>
+
+<!--表格列格式化模板 start-->
+<!--表格列格式化模板 end-->
+
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['element', 'form', 'layer', 'table', 'laydate'], function () {
+        var elemet = layui.element, form = layui.form, layer = layui.layer, table = layui.table, laydate = layui.laydate;
+        var tableId = 'kContentTable';
+        var area = ['449px', '90%'];
+
+        // 实例化table
+        var tableIns = table.render($.extend(config.layui.table, {
+            elem: '#' + tableId
+            ,url: BASE_WEB + 'hotel/logs/list/data' // 数据接口
+            ,defaultToolbar: ['filter', 'exports', '']
+            ,toolbar: '#headToolbarTpl'
+            ,cols: [[ //表头
+                {type:'checkbox', fixed: 'left'}
+                ,{field: 'roomNum', title: '房间号', width: 130}
+                ,{field: 'roomType', title: '房间类型',templet: '#roomTypeTpl'}
+                ,{field: 'guestName', title: '宾客姓名'}
+                ,{field: 'phonenum', title: '宾客电话', width: 130}
+                ,{field: 'startTime', title: '入住时间'}
+                ,{field: 'endTime', title: '退房时间'}
+                ,{field: 'status', title: '状态', templet: '#statusTpl'}
+                ,{field: 'pay', title: '预付款(元)'}
+                ,{field: 'price', title: '应付款(元)'}
+                ,{field: 'priceStatus', title: '付款状态', templet: '#priceStatusTpl'}
+                ,{field: '', title: '操作', fixed: 'right', templet: '#rowToolbarTpl'}
+            ]]
+        }));
+
+        // 监听表格头部事件
+        table.on('toolbar(' + tableId + ')', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            var checkData = checkStatus.data; // 得到选中的数据
+            switch(obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2
+                        ,title: '添加'
+                        ,content: BASE_WEB + 'hotel/logs/edit'
+                        ,maxmin: true
+                        ,area: area   // 宽高
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                            submit.click();
+                        }
+                    });
+                    break;
+                case 'batchdel':
+                    if(checkData.length === 0){
+                        return kvfKit.warningMsg('请选择数据');
+                    }
+                    layer.confirm('确定删除吗？', function(index) {
+                        var ids = [];
+                        $.each(checkData, function(i, n){
+                            ids[i] = n.id;
+                        });
+
+                        //执行 Ajax 后重载
+                        $.ajax({
+                            type: req.type.post,
+                            url: BASE_WEB + 'hotel/logs/batchdel',
+                            data: {ids: ids.toString()},
+                            success: function (r) {
+                                if (r.code === req.status.ok) {
+                                    table.reload(tableId);
+                                    kvfKit.sucessMsg('已删除');
+                                } else {
+                                    kvfKit.errorMsg(r.msg);
+                                }
+                            }
+                        });
+                    });
+                    break;
+            }
+        });
+
+        // 表格行按钮 监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'edit') {
+                layer.open({
+                    type: 2
+                    ,title: '编辑'
+                    ,content: BASE_WEB + 'hotel/logs/edit?id=' + data.id
+                    ,maxmin: true
+                    ,area: area   // 宽高
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        //点击确认触发 iframe 内容中的按钮提交
+                        var submit = layero.find('iframe').contents().find("#kFormSubmit");
+                        submit.click();
+                    }
+                });
+            };
+            if (layEvent === 'payment') {
+                layer.confirm('确定结账吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'hotel/logs/payment/' + data.id,
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已结账');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            };
+            if (layEvent === 'goAway') {
+                layer.confirm('确定退房吗？', function(index) {
+                    //执行 Ajax 后重载
+                    $.ajax({
+                        type: req.type.post,
+                        url: BASE_WEB + 'hotel/logs/goAway/' + data.id +'/' + data.roomId,
+                        async: false,
+                        success: function (r) {
+                            if (r.code === req.status.ok) {
+                                table.reload(tableId);
+                                kvfKit.sucessMsg('已退房');
+                            } else {
+                                kvfKit.errorMsg(r.msg);
+                            }
+                        }
+                    });
+                });
+            };
+        });
+
+        // 监听查询
+        form.on('submit(kTableSearchFilter)', function (obj) {
+            var params = obj.field;
+            tableIns.reload({
+                where: params,
+                page: {current: 1}
+            });
+            return false;
+        });
+
+        // 绑定监听回车事件
+        kvfKit.bindEnterEventForLayuiForm();
+
+    });
+</script>
+
+</body>
+</html>

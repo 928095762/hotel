@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title th:replace="common/base::pagetitle"></title>
+    <link th:replace="common/base::static"/>
+</head>
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        <div class="layui-logo" style="color: #0a9dc7">酒店管理系统</div>
+        <ul class="layui-nav layui-layout-right">
+            <div class="layui-nav-item">
+                欢迎您： <span th:text="${session.user.name}"></span>
+            </div>
+            <li class="layui-nav-item"><a th:href="@{~/hotel/logout}">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item" th:if="${session.user.roleFlag != 2}">
+                    <a class="" href="javascript:;">用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{~/sys/user/index}">用户管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">客房管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{~/hotel/room/indexView}">客房查看</a></dd>
+                    </dl>
+                    <dl class="layui-nav-child" th:if="${session.user.roleFlag != 2}">
+                        <dd><a th:href="@{~/hotel/room/index}">客房管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">宾客管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{~/hotel/guest/index}">宾客管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">预订管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{~/hotel/reserve/index}">预订管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">住房记录</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{~/hotel/logs/index}">住房记录</a></dd>
+                    </dl>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <iframe id="iframeMain" src="" style="width: 100%" height="100%"></iframe>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        Copyright © 酒店管理系统
+    </div>
+</div>
+<script th:replace="common/base::context"></script>
+<script th:replace="common/base::mainjs"></script>
+<script>
+    $(document).ready(function(){
+        $("dd>a").click(function (e) {
+            e.preventDefault();
+            $("#iframeMain").attr("src",$(this).attr("href"));
+        });
+    });
+</script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+
+    });
+</script>
+</body>
+</html>

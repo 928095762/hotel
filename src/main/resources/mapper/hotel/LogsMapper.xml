@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kd.dsr.modules.hotel.mapper.LogsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.kd.dsr.modules.hotel.entity.Logs">
+        <id column="id" property="id" />
+        <result column="room_id" property="roomId" />
+        <result column="room_num" property="roomNum" />
+        <result column="room_type" property="roomType" />
+        <result column="guest_id" property="guestId" />
+        <result column="guest_name" property="guestName" />
+        <result column="phonenum" property="phonenum" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="status" property="status" />
+        <result column="pay" property="pay" />
+        <result column="price" property="price" />
+        <result column="price_status" property="priceStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       id, room_id, room_num, room_type, guest_id, guest_name, phonenum, start_time, end_time, status, pay, price, price_status, create_time, create_by
+    </sql>
+
+    <select id="selectLogsList" resultType="cn.kd.dsr.modules.hotel.entity.Logs">
+        select <include refid="Base_Column_List" /> from room_logs
+        <trim prefix="where" prefixOverrides="and">
+            <if test="logs.roomNum != null and logs.roomNum != ''">
+                and room_num like concat("%" , #{logs.roomNum}, "%")
+            </if>
+            <if test="logs.guestName != null and logs.guestName != ''">
+                and guest_name like concat("%" , #{logs.guestName}, "%")
+            </if>
+            <if test="logs.phonenum != null">
+                and phonenum like concat("%" , #{logs.phonenum}, "%")
+            </if>
+            <if test="logs.status != null">
+                and status = #{logs.status}
+            </if>
+            <if test="logs.priceStatus != null">
+                and price_status = #{logs.priceStatus}
+            </if>
+        </trim>
+        order by create_time desc
+    </select>
+
+</mapper>
